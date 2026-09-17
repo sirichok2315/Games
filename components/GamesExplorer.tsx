@@ -56,12 +56,12 @@ export default function GamesExplorer({ initialGames }: GamesExplorerProps) {
       prev.map((game) =>
         String(game.id) === id
           ? {
-              ...game,
-              title: draft.title.trim(),
-              hours: Number(draft.hours),
-              platform: draft.platform.trim(),
-              status: draft.status.trim(),
-            }
+            ...game,
+            title: draft.title.trim(),
+            hours: Number(draft.hours),
+            platform: draft.platform.trim(),
+            status: draft.status.trim(),
+          }
           : game
       )
     );
@@ -97,45 +97,69 @@ export default function GamesExplorer({ initialGames }: GamesExplorerProps) {
   const editingGame = games.find((game) => String(game.id) === editingId);
 
   return (
-    <div>
-      {/* แสดง Derived State */}
-      <div className="p-2 bg-gray-100 mb-4">
-        <strong>จำนวนชั่วโมงรวมของเกมที่ยังไม่ได้เริ่ม:</strong> {pendingHoursTotal} ชั่วโมง
-      </div>
+    <div className="space-y-6">
+      {/* สรุปชั่วโมง และ ช่องค้นหา/ตัวกรอง */}
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-4">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          <span className="text-sm font-semibold text-slate-600">
+            จำนวนชั่วโมงรวมของเกมที่ยังไม่ได้เริ่ม
+          </span>
+          <span className="text-base font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+            ⏱️ {pendingHoursTotal} ชั่วโมง
+          </span>
+        </div>
 
-      {/* ช่องค้นหาและตัวกรองสถานะ */}
-      <div className="flex gap-2 mb-4">
-        <input
-          type="search"
-          placeholder="ค้นหาชื่อเกมหรือแพลตฟอร์ม"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="ทั้งหมด">-- ทุกสถานะ --</option>
-          <option value="ยังไม่เริ่ม">ยังไม่เริ่ม</option>
-          <option value="กำลังเล่น">กำลังเล่น</option>
-          <option value="เล่นจบแล้ว">เล่นจบแล้ว</option>
-        </select>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <input
+            type="search"
+            placeholder="🔍 ค้นหาชื่อเกมหรือแพลตฟอร์ม..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            className="form-input flex-1 mb-0!"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="form-select sm:w-48 mb-0!"
+          >
+            <option value="ทั้งหมด">-- ทุกสถานะ --</option>
+            <option value="ยังไม่เริ่ม">ยังไม่เริ่ม</option>
+            <option value="กำลังเล่น">กำลังเล่น</option>
+            <option value="เล่นจบแล้ว">เล่นจบแล้ว</option>
+          </select>
+        </div>
       </div>
 
       {/* Pop-up / Modal ยืนยันก่อนลบ */}
       {deletingId && (
-        <div className="p-4 border border-red-500 bg-red-50 mb-4">
-          <p>คุณต้องการลบรายการนี้ใช่หรือไม่?</p>
-          <button type="button" onClick={confirmDelete}>ยืนยันลบ</button>
-          <button type="button" onClick={() => setDeletingId(null)}>ยกเลิก</button>
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-center justify-between">
+          <p className="text-sm font-semibold text-rose-700">คุณต้องการลบรายการนี้ใช่หรือไม่?</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={confirmDelete}
+              className="px-3 py-1 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors"
+            >
+              ยืนยันลบ
+            </button>
+            <button
+              type="button"
+              onClick={() => setDeletingId(null)}
+              className="px-3 py-1 text-xs font-semibold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg transition-colors"
+            >
+              ยกเลิก
+            </button>
+          </div>
         </div>
       )}
 
       {/* รายการเกม */}
       {visibleGames.length === 0 ? (
-        <p>ไม่พบรายการเกมที่ตรงกับเงื่อนไข</p>
+        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200/80">
+          <p className="text-slate-400 font-medium">ไม่พบรายการเกมที่ตรงกับเงื่อนไข</p>
+        </div>
       ) : (
-        <section>
+        <section className="space-y-4">
           {visibleGames.map((game) => (
             <GamesCard
               key={game.id}
@@ -143,14 +167,14 @@ export default function GamesExplorer({ initialGames }: GamesExplorerProps) {
               isFavorite={favoriteIds.includes(String(game.id))}
               onToggleFavorite={handleToggleFavorite}
               onEdit={setEditingId}
-              onDelete={(id) => setDeletingId(id)} // ตั้งค่า ID ที่จะลบเพื่อรอยืนยัน
+              onDelete={(id) => setDeletingId(id)}
               onChangeStatus={handleChangeStatus}
             />
           ))}
         </section>
       )}
 
-      <h2>{editingId ? "แก้ไขรายการเกม" : "เพิ่มรายการเกมใหม่"}</h2>
+      {/* ฟอร์มเพิ่ม/แก้ไข */}
       <GamesForm
         key={editingId ?? "new"}
         initialGame={editingGame}

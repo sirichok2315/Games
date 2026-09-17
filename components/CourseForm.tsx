@@ -3,7 +3,6 @@
 import { Course } from "@/app/types/course";
 import { ChangeEvent, FormEvent, useState } from "react";
 
-// 2. Type ของ Props และ Type ของข้อมูลในฟอร์ม
 export type CourseDraft = {
     code: string;
     name: string;
@@ -37,15 +36,12 @@ function toDraft(course?: Course): CourseDraft {
     };
 }
 
-// Type สำหรับเก็บ Error ในฟอร์ม
 type FormErrors = Partial<Record<keyof CourseDraft, string>>;
 
 export default function CourseForm({ initialCourse, onSave, onCancel }: CourseFormProps) {
-    // 3. State ของฟอร์มและ State ของข้อความแจ้งเตือน
     const [draft, setDraft] = useState<CourseDraft>(toDraft(initialCourse));
     const [errors, setErrors] = useState<FormErrors>({});
 
-    // 4. ฟังก์ชันตรวจสอบความถูกต้อง
     function validate(value: CourseDraft): FormErrors {
         const nextErrors: FormErrors = {};
 
@@ -65,7 +61,6 @@ export default function CourseForm({ initialCourse, onSave, onCancel }: CourseFo
         return nextErrors;
     }
 
-    // 5. ฟังก์ชัน handle สำหรับเหตุการณ์ต่าง ๆ
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
         setDraft((prev) => ({ ...prev, [name]: value }));
@@ -86,72 +81,95 @@ export default function CourseForm({ initialCourse, onSave, onCancel }: CourseFo
         setErrors({});
     }
 
-    // 6. Return ส่วนแสดงผล (อยู่นอก handleSubmit)
     return (
-        <form onSubmit={handleSubmit} noValidate>
-            <div>
-                <label htmlFor="code">รหัสวิชา</label>
-                <input
-                    id="code"
-                    name="code"
-                    type="text"
-                    value={draft.code}
-                    onChange={handleChange}
-                    aria-invalid={!!errors.code}
-                    aria-describedby={errors.code ? "code-error" : undefined}
-                />
-                {errors.code ? <p id="code-error">{errors.code}</p> : null}
-            </div>
+        <div className="form-card">
+            <h3 className="text-xl font-extrabold text-slate-800 mb-5 flex items-center gap-2">
+                {initialCourse ? "✏️ แก้ไขวิชาเรียน" : "📚 เพิ่มวิชาเรียนใหม่"}
+            </h3>
 
-            <div>
-                <label htmlFor="name">ชื่อวิชา</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={draft.name}
-                    onChange={handleChange}
-                    aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                />
-                {errors.name ? <p id="name-error">{errors.name}</p> : null}
-            </div>
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                <div className="form-group">
+                    <label htmlFor="code" className="form-label">รหัสวิชา</label>
+                    <input
+                        id="code"
+                        name="code"
+                        type="text"
+                        value={draft.code}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="เช่น CS101"
+                        aria-invalid={!!errors.code}
+                        aria-describedby={errors.code ? "code-error" : undefined}
+                    />
+                    {errors.code ? <p id="code-error" className="text-xs text-rose-500 font-medium mt-1">{errors.code}</p> : null}
+                </div>
 
-            <div>
-                <label htmlFor="credit">หน่วยกิต</label>
-                <input
-                    id="credit"
-                    name="credit"
-                    type="number"
-                    inputMode="numeric"
-                    min="1"
-                    max="6"
-                    value={draft.credit}
-                    onChange={handleChange}
-                    aria-invalid={!!errors.credit}
-                    aria-describedby={errors.credit ? "credit-error" : undefined}
-                />
-                {errors.credit ? <p id="credit-error">{errors.credit}</p> : null}
-            </div>
+                <div className="form-group">
+                    <label htmlFor="name" className="form-label">ชื่อวิชา</label>
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        value={draft.name}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="เช่น Introduction to Computer Science"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "name-error" : undefined}
+                    />
+                    {errors.name ? <p id="name-error" className="text-xs text-rose-500 font-medium mt-1">{errors.name}</p> : null}
+                </div>
 
-            <div>
-                <label htmlFor="instructor">ผู้สอน</label>
-                <input
-                    id="instructor"
-                    name="instructor"
-                    type="text"
-                    value={draft.instructor}
-                    onChange={handleChange}
-                    aria-invalid={!!errors.instructor}
-                    aria-describedby={errors.instructor ? "instructor-error" : undefined}
-                />
-                {errors.instructor ? <p id="instructor-error">{errors.instructor}</p> : null}
-            </div>
+                <div className="form-group">
+                    <label htmlFor="credit" className="form-label">หน่วยกิต</label>
+                    <input
+                        id="credit"
+                        name="credit"
+                        type="number"
+                        inputMode="numeric"
+                        min="1"
+                        max="6"
+                        value={draft.credit}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="1 - 6"
+                        aria-invalid={!!errors.credit}
+                        aria-describedby={errors.credit ? "credit-error" : undefined}
+                    />
+                    {errors.credit ? <p id="credit-error" className="text-xs text-rose-500 font-medium mt-1">{errors.credit}</p> : null}
+                </div>
 
-            <button type="submit">บันทึก</button>
-            {initialCourse ? (
-                <button type="button" onClick={onCancel}>ยกเลิก</button>
-            ) : null}
-        </form>
+                <div className="form-group">
+                    <label htmlFor="instructor" className="form-label">ผู้สอน</label>
+                    <input
+                        id="instructor"
+                        name="instructor"
+                        type="text"
+                        value={draft.instructor}
+                        onChange={handleChange}
+                        className="form-input"
+                        placeholder="เช่น อ.สมชาย ใจดี"
+                        aria-invalid={!!errors.instructor}
+                        aria-describedby={errors.instructor ? "instructor-error" : undefined}
+                    />
+                    {errors.instructor ? <p id="instructor-error" className="text-xs text-rose-500 font-medium mt-1">{errors.instructor}</p> : null}
+                </div>
+
+                <div className="flex items-center gap-2 pt-2">
+                    <button type="submit" className="btn-submit">
+                        💾 บันทึกข้อมูล
+                    </button>
+                    {initialCourse ? (
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                        >
+                            ยกเลิก
+                        </button>
+                    ) : null}
+                </div>
+            </form>
+        </div>
     );
 }
