@@ -56,24 +56,13 @@
 //     </main>
 //   );
 // }
-import CourseCard from "@/components/CourseCard";
-import BandCard from "@/components/BandCard";
-import { courses } from "@/data/courses";
-import { bandsData } from "@/data/bandsData";
-
+import { gamesData } from "@/data/GameData";
+import GamesExplorer from "@/components/GamesExplorer";
 
 export default function Home() {
-  const topics = ["HTML", "CSS", "TypeScript", "Next.js"];
-
   return (
-    <main style={{ padding: "20px" }}>
-      
-      <h2 style={{ fontSize: "1.5rem", margin: "40px 0 20px 0" }}>Favorite Bands</h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
-        {bandsData.map((band) => (
-          <BandCard key={band.id} band={band} />
-        ))}
-      </div>
+    <main className="p-6">
+      <GamesExplorer initialGames={gamesData} />
     </main>
   );
 }
