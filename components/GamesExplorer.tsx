@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import { useState } from "react";
 import type { Games } from "@/app/types/Game";
 import GamesCard from "@/components/GamesCard";
 import GamesForm, { type GameDraft } from "@/components/GamesForm";
@@ -109,18 +109,22 @@ export default function GamesExplorer({ initialGames }: GamesExplorerProps) {
           </span>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        {/* ช่องค้นหาและตัวกรองสถานะ */}
+        <div className="flex flex-col gap-3 w-full">
+          {/* ช่องค้นหายาวเต็มความกว้างกรอบ */}
           <input
             type="search"
             placeholder="🔍 ค้นหาชื่อเกมหรือแพลตฟอร์ม..."
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            className="form-input flex-1 mb-0!"
+            className="form-input w-full block"
           />
+
+          {/* ตัวเลือกสถานะอยู่ด้านล่าง ยืดเต็มช่องสวยงาม */}
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="form-select sm:w-48 mb-0!"
+            className="form-select w-full block"
           >
             <option value="ทั้งหมด">-- ทุกสถานะ --</option>
             <option value="ยังไม่เริ่ม">ยังไม่เริ่ม</option>

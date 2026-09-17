@@ -11,9 +11,9 @@ export default function RootLayout({
       <body className="bg-slate-50 min-h-screen text-slate-800 flex flex-col">
         {/* แถบเมนูตรงกลาง */}
         <header className="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-50">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="w-full max-w-[2400px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
             <nav>
-              <ul className="flex items-center gap-6 sm:gap-8 text-sm font-semibold text-slate-600">
+              <ul className="flex items-center gap-4 text-sm font-semibold text-slate-600">
                 <li>
                   <Link href="/courses" className="hover:text-indigo-600 transition-colors">
                     หลักสูตร
@@ -35,7 +35,7 @@ export default function RootLayout({
         </header>
 
         {/* เนื้อหากรอบขนาดพอดีอยู่ตรงกลาง */}
-        <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 flex items-center justify-center">
+        <main className="w-full max-w-[2400px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6 flex-1 flex items-center justify-center">
           {children}
         </main>
       </body>
